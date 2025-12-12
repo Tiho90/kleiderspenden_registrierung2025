@@ -4,8 +4,8 @@
  * KONFIGURATION – Geschäftsstelle
  */
 const OFFICE = {
-  address: "Patzetz 8, 39240 Sachsendorf",
-  zip: "39240",
+  address: "Musterstraße 1 , 99084 Erfurt",
+  zip: "99084",
 };
 
 const CRISIS_REGIONS = [

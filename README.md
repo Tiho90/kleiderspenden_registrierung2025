@@ -32,8 +32,8 @@ Spendende können:
 - Sichere Ausgabe von Benutzereingaben über `textContent` (kein `innerHTML`)
 
 ## Geschäftsstelle (Konfiguration)
-- **Adresse:** Patzetz 8, 39240 Sachsendorf  
-- **PLZ-Nahbereich:** 39xxx (Abholung nur bei PLZ mit Prefix **39**)
+- **Adresse:** Musterstraße 1 , 99084 Erfurt 
+- **PLZ-Nahbereich:** 99xxx (Abholung nur bei PLZ mit Prefix **39**)
 
 Diese Werte werden in `app.js` im Objekt `OFFICE` gepflegt.
 
