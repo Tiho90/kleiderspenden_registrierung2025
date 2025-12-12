@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kleiderspenden-Registrierung</title>
+
+  <!-- Tailwind CSS (CDN) -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <meta name="description" content="Portal zur Registrierung von Kleiderspenden inkl. Auswahl von Krisenregionen." />
+</head>
+
+<body class="min-h-screen bg-slate-50 text-slate-900">
+  <!-- Header -->
+  <header class="sticky top-0 z-10 border-b bg-white/90 backdrop-blur">
+    <div class="mx-auto max-w-4xl px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="h-9 w-9 rounded-xl bg-slate-900"></div>
+        <div>
+          <p class="font-semibold leading-tight">Kleiderspenden-Registrierung</p>
+          <p class="text-xs text-slate-500 leading-tight">Verein – Spendenportal</p>
+        </div>
+      </div>
+
+      <nav class="flex items-center gap-4 text-sm">
+        <a href="#registrierung" class="hover:text-slate-700">Registrierung</a>
+        <a href="#hinweise" class="hover:text-slate-700">Hinweise</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="mx-auto max-w-4xl px-4 py-8" id="registrierung">
+    <!-- Intro -->
+    <section class="mb-6">
+      <h1 class="text-2xl font-bold tracking-tight">Spende registrieren</h1>
+      <p class="mt-2 text-slate-600">
+        Bitte registrieren Sie Ihre Kleiderspende. Sie können auswählen, ob Sie die Spende
+        an der Geschäftsstelle übergeben oder eine Abholung anfragen möchten.
+      </p>
+
+      <!-- Info card -->
+      <div class="mt-4 rounded-2xl border bg-white p-4 text-sm">
+        <p class="font-medium">Geschäftsstelle</p>
+        <p class="text-slate-600">
+          Patzetz 8, 39240 Sachsendorf · PLZ-Nahbereich:
+          <span id="officeZipPrefix" class="font-semibold">39</span>xxx
+        </p>
+      </div>
+    </section>
+
+    <!-- Error box -->
+    <div id="errorBox" class="hidden mb-6 rounded-2xl border border-red-200 bg-red-50 p-4">
+      <p class="font-semibold text-red-800">Bitte prüfen Sie Ihre Eingaben:</p>
+      <ul id="errorList" class="mt-2 list-disc pl-5 text-red-800 text-sm"></ul>
+    </div>
+
+    <!-- FORM CARD -->
+    <section id="formCard" class="rounded-2xl border bg-white p-5 shadow-sm">
+      <form id="donationForm" class="space-y-6" novalidate>
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+          <div>
+            <label for="clothingType" class="block text-sm font-medium">Kleidungsart <span class="text-red-600">*</span></label>
+            <select id="clothingType" name="clothingType"
+                    class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900">
+              <option value="">Bitte auswählen…</option>
+              <option>Jacken/Mäntel</option>
+              <option>Pullover/Hoodies</option>
+              <option>Hosen/Jeans</option>
+              <option>T-Shirts/Oberteile</option>
+              <option>Schuhe</option>
+              <option>Kinderkleidung</option>
+              <option>Decken/Schlafsäcke</option>
+              <option>Sonstiges</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="crisisRegion" class="block text-sm font-medium">Krisenregion <span class="text-red-600">*</span></label>
+            <select id="crisisRegion" name="crisisRegion"
+                    class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900">
+              <!-- via JS befüllt -->
+            </select>
+          </div>
+        </div>
+
+        <div>
+          <label for="quantity" class="block text-sm font-medium">Menge (optional)</label>
+          <input id="quantity" name="quantity" type="text" placeholder="z. B. 2 Säcke / 1 Karton"
+                 class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+        </div>
+
+        <!-- Process choice -->
+        <fieldset class="rounded-2xl border border-slate-200 p-4">
+          <legend class="px-2 text-sm font-medium">Wie soll die Spende übergeben werden? <span class="text-red-600">*</span></legend>
+          <div class="mt-3 flex flex-col gap-2 sm:flex-row sm:gap-6">
+            <label class="inline-flex items-center gap-2">
+              <input type="radio" name="processType" value="handover" class="h-4 w-4 accent-slate-900" checked />
+              <span>Übergabe an der Geschäftsstelle</span>
+            </label>
+            <label class="inline-flex items-center gap-2">
+              <input type="radio" name="processType" value="pickup" class="h-4 w-4 accent-slate-900" />
+              <span>Abholung durch Sammelfahrzeug</span>
+            </label>
+          </div>
+        </fieldset>
+
+        <!-- Handover section -->
+        <div id="handoverSection" class="space-y-4">
+          <div class="rounded-2xl bg-slate-50 p-4">
+            <p class="font-medium">Übergabe – Termin</p>
+            <p class="text-sm text-slate-600">Bitte wählen Sie Datum und Uhrzeit für die Übergabe an der Geschäftsstelle.</p>
+
+            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label for="handoverDate" class="block text-sm font-medium">Datum <span class="text-red-600">*</span></label>
+                <input id="handoverDate" name="handoverDate" type="date"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+              <div>
+                <label for="handoverTime" class="block text-sm font-medium">Uhrzeit <span class="text-red-600">*</span></label>
+                <input id="handoverTime" name="handoverTime" type="time"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+            </div>
+
+            <div class="mt-4 text-sm">
+              <p class="font-medium">Ort</p>
+              <p class="text-slate-600">Geschäftsstelle: Patzetz 8, 39240 Sachsendorf</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pickup section -->
+        <div id="pickupSection" class="hidden space-y-4">
+          <div class="rounded-2xl bg-slate-50 p-4">
+            <p class="font-medium">Abholung – Adresse & Termin</p>
+            <p class="text-sm text-slate-600">
+              Abholungen sind nur im Nahbereich möglich. Die ersten zwei Ziffern der PLZ müssen mit der Geschäftsstelle übereinstimmen.
+            </p>
+
+            <div class="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div>
+                <label for="fullName" class="block text-sm font-medium">Name <span class="text-red-600">*</span></label>
+                <input id="fullName" name="fullName" type="text" placeholder="Vor- und Nachname"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+
+              <div>
+                <label for="contact" class="block text-sm font-medium">Kontakt (E-Mail oder Telefon) <span class="text-red-600">*</span></label>
+                <input id="contact" name="contact" type="text" placeholder="z. B. name@mail.de oder 0176…"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+
+              <div class="md:col-span-2">
+                <label for="street" class="block text-sm font-medium">Straße & Hausnr. <span class="text-red-600">*</span></label>
+                <input id="street" name="street" type="text" placeholder="z. B. Beispielweg 12"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+
+              <div>
+                <label for="zip" class="block text-sm font-medium">PLZ <span class="text-red-600">*</span></label>
+                <input id="zip" name="zip" type="text" inputmode="numeric" maxlength="5" placeholder="z. B. 39240"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+
+              <div>
+                <label for="city" class="block text-sm font-medium">Ort <span class="text-red-600">*</span></label>
+                <input id="city" name="city" type="text" placeholder="z. B. Sachsendorf"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+
+              <div>
+                <label for="pickupDate" class="block text-sm font-medium">Wunschtermin (Datum) <span class="text-red-600">*</span></label>
+                <input id="pickupDate" name="pickupDate" type="date"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+
+              <div>
+                <label for="pickupTime" class="block text-sm font-medium">Wunschtermin (Uhrzeit) <span class="text-red-600">*</span></label>
+                <input id="pickupTime" name="pickupTime" type="time"
+                       class="mt-1 w-full rounded-xl border border-slate-200 bg-white px-3 py-2 focus:outline-none focus:ring-2 focus:ring-slate-900"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <p class="text-xs text-slate-500">
+            Felder mit <span class="text-red-600">*</span> sind Pflichtfelder.
+          </p>
+          <div class="flex gap-3">
+            <button type="reset"
+                    class="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm hover:bg-slate-50">
+              Zurücksetzen
+            </button>
+            <button type="submit"
+                    class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+              Spende registrieren
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+
+    <!-- CONFIRMATION -->
+    <section id="confirmCard" class="hidden mt-6 rounded-2xl border bg-white p-5 shadow-sm">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <h2 class="text-xl font-bold">Bestätigung</h2>
+          <p class="mt-1 text-slate-600 text-sm">Die Registrierung wurde erfolgreich erfasst.</p>
+        </div>
+        <span class="rounded-xl bg-emerald-50 px-3 py-1 text-sm font-medium text-emerald-700 border border-emerald-100">
+          Erfolgreich
+        </span>
+      </div>
+
+      <div class="mt-5 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div class="rounded-2xl bg-slate-50 p-4">
+          <p class="text-sm font-medium">Spendeninformation</p>
+          <dl class="mt-2 space-y-2 text-sm">
+            <div class="flex justify-between gap-4">
+              <dt class="text-slate-600">Kleidungsart</dt>
+              <dd id="c_clothing" class="font-medium text-right"></dd>
+            </div>
+            <div class="flex justify-between gap-4">
+              <dt class="text-slate-600">Menge</dt>
+              <dd id="c_quantity" class="font-medium text-right"></dd>
+            </div>
+            <div class="flex justify-between gap-4">
+              <dt class="text-slate-600">Krisenregion</dt>
+              <dd id="c_region" class="font-medium text-right"></dd>
+            </div>
+            <div class="flex justify-between gap-4">
+              <dt class="text-slate-600">Prozess</dt>
+              <dd id="c_process" class="font-medium text-right"></dd>
+            </div>
+          </dl>
+        </div>
+
+        <div class="rounded-2xl bg-slate-50 p-4">
+          <p class="text-sm font-medium">Termin & Ort</p>
+          <dl class="mt-2 space-y-2 text-sm">
+            <div class="flex justify-between gap-4">
+              <dt class="text-slate-600">Datum</dt>
+              <dd id="c_date" class="font-medium text-right"></dd>
+            </div>
+            <div class="flex justify-between gap-4">
+              <dt class="text-slate-600">Uhrzeit</dt>
+              <dd id="c_time" class="font-medium text-right"></dd>
+            </div>
+            <div class="flex justify-between gap-4">
+              <dt class="text-slate-600">Ort/Adresse</dt>
+              <dd id="c_location" class="font-medium text-right"></dd>
+            </div>
+            <div id="pickupExtra" class="hidden pt-2 border-t border-slate-200">
+              <p class="text-xs text-slate-500">Kontakt</p>
+              <p id="c_contact" class="text-sm font-medium"></p>
+            </div>
+          </dl>
+        </div>
+      </div>
+
+      <div class="mt-5 flex flex-col gap-3 sm:flex-row sm:justify-between sm:items-center">
+        <p class="text-xs text-slate-500">Hinweis: Diese Demo speichert keine Daten serverseitig.</p>
+        <button id="newDonationBtn"
+                class="rounded-xl bg-slate-900 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800">
+          Neue Spende registrieren
+        </button>
+      </div>
+    </section>
+
+    <!-- Hinweise -->
+    <section id="hinweise" class="mt-8 rounded-2xl border bg-white p-5">
+      <h2 class="text-lg font-bold">Hinweise zur Abholung</h2>
+      <p class="mt-2 text-sm text-slate-600">
+        Abholanfragen werden nur innerhalb des definierten Nahbereichs akzeptiert (PLZ-Prüfung über die ersten zwei Ziffern).
+        Alternativ kann jederzeit die Übergabe an der Geschäftsstelle gewählt werden.
+      </p>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="mt-10 border-t bg-white">
+    <div class="mx-auto max-w-4xl px-4 py-6 text-sm text-slate-600">
+      <p class="font-medium text-slate-900">Rechtliche Hinweise</p>
+      <p class="mt-1">Impressum (Platzhalter) · Datenschutz (Platzhalter)</p>
+      <p class="mt-3 text-xs text-slate-400">© <span id="year"></span> Verein – Kleiderspenden</p>
+    </div>
+  </footer>
+
+  <script src="./app.js"></script>
+</body>
+</html>
