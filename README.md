@@ -28,12 +28,12 @@ Spendende können:
   - Pflichtfelderprüfung
   - PLZ-Format (5 Ziffern)
   - **PLZ-Näheprüfung** für Abholung: erste zwei Ziffern müssen mit der Geschäftsstelle übereinstimmen
-- Bestätigungsansicht auf derselben Seite (Variante B)
+- Bestätigungsansicht auf derselben Seite 
 - Sichere Ausgabe von Benutzereingaben über `textContent` (kein `innerHTML`)
 
 ## Geschäftsstelle (Konfiguration)
 - **Adresse:** Musterstraße 1 , 99084 Erfurt 
-- **PLZ-Nahbereich:** 99xxx (Abholung nur bei PLZ mit Prefix **39**)
+- **PLZ-Nahbereich:** 99xxx (Abholung nur bei PLZ mit Prefix **99**)
 
 Diese Werte werden in `app.js` im Objekt `OFFICE` gepflegt.
 
